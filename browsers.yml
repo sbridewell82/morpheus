@@ -1,0 +1,51 @@
+---
+- name: Install Browsers on Windows via Morpheus
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ensure Temp directory exists
+      win_file:
+        path: C:\Temp
+        state: directory
+
+    - name: Download Firefox Installer
+      win_get_url:
+        url: https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US
+        dest: C:\Temp\FirefoxInstaller.exe
+        validate_certs: no
+
+    - name: Install Firefox
+      win_package:
+        path: C:\Temp\FirefoxInstaller.exe
+        arguments: "-ms"
+        state: present
+
+    - name: Download Chrome Installer
+      win_get_url:
+        url: https://dl.google.com/chrome/install/latest/chrome_installer.exe
+        dest: C:\Temp\ChromeInstaller.exe
+        validate_certs: no
+
+    - name: Install Chrome
+      win_package:
+        path: C:\Temp\ChromeInstaller.exe
+        arguments: "--silent --install"
+        state: present
+
+    - name: Download Opera Installer
+      win_get_url:
+        url: https://get.geo.opera.com/pub/opera/desktop/96.0.4693.31/win/Opera_96.0.4693.31_Setup.exe
+        dest: C:\Temp\OperaInstaller.exe
+        validate_certs: no
+
+    - name: Install Opera
+      win_package:
+        path: C:\Temp\OperaInstaller.exe
+        arguments: "/silent /install"
+        state: present
+
+    - name: Clean up installers
+      win_file:
+        path: C:\Temp
+        state: absent
+
