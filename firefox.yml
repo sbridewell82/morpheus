@@ -1,1 +1,27 @@
+---
+- name: Install Firefox on Windows via Morpheus
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Ensure Temp directory exists
+      win_file:
+        path: C:\Temp
+        state: directory
+
+    - name: Download Firefox Installer
+      win_get_url:
+        url: https://download.mozilla.org/?product=firefox-latest&os=win64&lang=en-US
+        dest: C:\Temp\FirefoxInstaller.exe
+        validate_certs: no
+
+    - name: Install Firefox silently
+      win_package:
+        path: C:\Temp\FirefoxInstaller.exe
+        arguments: "-ms"
+        state: present
+
+    - name: Remove Firefox Installer
+      win_file:
+        path: C:\Temp\FirefoxInstaller.exe
+        state: absent
 
